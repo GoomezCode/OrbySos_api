@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from database.insert import *
 from database.select import *
-from util.function import buscarCep
+from util.function import buscarCep, gerarHash
 from classes.classPessoa import *
 
 router = APIRouter(
@@ -100,12 +100,25 @@ def endereco(dado:tb_endereco):
 
 @router.post("/user")
 def user(dado:tb_user):
+    dados = select().select_pessoa_id(dado.fk_pessoa)
+    if dados == None:
+        raise HTTPException(
+            status_code=404, 
+            detail="Usuário não encontrado!!!"
+        )
+    dado.senha = gerarHash(dado.senha)
     
     insert().insert_user(dado)
-    return {"teste":"Daniel bonito"}
+    return {"messagem":f"User: {dado.fk_pessoa} foi cadastrado com sucesso!!"}
 
 @router.post("/veiculo")
 def veiculo(dado:tb_veiculo):
+    dados = select().select_pessoa_id(dado.fk_pessoa)
+    if dados == None:
+        raise HTTPException(
+            status_code=404, 
+            detail="Usuário não encontrado!!!"
+        )
     
     insert().insert_veiculo(dado)
-    return{"teste":"Daniel bonito"}
+    return{"messagem":f"O veiculo: {dado.marca} foi cadastrado com sucesso para {dado.fk_pessoa}"}

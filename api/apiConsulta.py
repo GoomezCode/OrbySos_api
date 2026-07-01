@@ -9,9 +9,16 @@ router = APIRouter(
 
 @router.get("/all/{table}")
 def getAll(table:str):
-    print(select().select_all(table))
     return select().select_all(table)
 
 @router.get("/filter/tbPessoaId/{id}")
 def getPessoaId(id:int):
     return select().select_pessoa_id(id)
+
+@router.get("/pessoaJuridica")
+def getPessoaJuridica():
+    return select().select_pessoaJuridica()
+
+@router.get("/pessoaFisica")
+def getPessoaFisica():
+    return select().select_pessoaFisica()

@@ -69,8 +69,6 @@ class insert:
             datetime.now()
         )
         self.execute_sql(query, dados)
-        
-    
     def insert_cep(self, cep):
         query = f'''insert into tb_cep (logradouro,bairro,cidade,estado,cep) values (%s,%s,%s,%s,%s)'''
         dados = (
