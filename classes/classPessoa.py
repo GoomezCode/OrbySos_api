@@ -1,0 +1,56 @@
+from pydantic import BaseModel
+    
+class tb_pessoa_juridica(BaseModel):
+    id_pj:int
+    razao_social:str
+    nome_fantasia:str
+    cnpj:str
+    fk_status:int
+    
+class tb_pessoa_fisica(BaseModel):
+    id_pf:int
+    nome:str
+    cpf:int
+    fk_sexo:int
+    data_nascimento:str
+    cnh:int
+    fk_estado_civil:int
+    fk_Status:int
+
+class tb_endereco(BaseModel):
+    fk_pessoa:int
+    logradouro:str
+    bairro:str
+    fk_tpLogradouro:str
+    cep:str
+    cidade:str
+    estado:str
+    pais:str
+    complemento:str
+    data_criacao:str
+
+class tb_cep(BaseModel):
+    logradouro:str
+    bairro:str
+    cidade:str
+    estado:str
+    cep:int
+    
+class tb_user(BaseModel):
+    fk_pessoa:int
+    login:str
+    senha:str
+    fk_status:int
+    
+class tb_veiculo(BaseModel):
+    fk_pessoa:int
+    marca:str
+    modelo:str
+    versao:str
+    ano_fabricacao:int
+    ano_modelo:int
+    placa:str
+    chassi:str
+    valor_fipe:str
+    fk_tpUso:int
+    blindado:bool
