@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from database.insert import *
 from database.select import *
+from util.function import buscarCep
 from classes.classPessoa import *
 
 router = APIRouter(
@@ -62,14 +63,40 @@ def endereco(dado:tb_endereco):
             detail="Usuário não encontrado!!!"
         )
     
+    '''
+        # Enquanto o CEP não for encontrado no banco de dados local,
+        # o sistema continua tentando obter as informações.
+        #
+        # 1. Consulta o CEP na tabela local de CEPs.
+        # 2. Se o CEP existir, preenche os dados de endereço
+        #    (logradouro, bairro, cidade e estado) e encerra o loop.
+        # 3. Caso não exista, busca as informações em uma API externa.
+        # 4. Se a API retornar código 400, significa que o CEP é inválido
+        #    ou não foi encontrado, então o usuário deverá informar os
+        #    dados manualmente.
+        # 5. Se o CEP for encontrado na API, os dados são gravados no
+        #    banco local para futuras consultas.
+        # 6. O loop reinicia para buscar novamente o CEP, que agora já
+        #    estará cadastrado no banco local.
+    '''
+    
+    while True:
+        dadosCep = select().select_cep_cep(dado.cep)
+        if dadosCep != None:
+            dado.logradouro = dadosCep[1]
+            dado.bairro = dadosCep[2]
+            dado.cidade = dadosCep[3]
+            dado.estado = dadosCep[4]
+            break
+        else:
+            dadosCep = buscarCep(dado.cep)
+            if dadosCep == 400:
+                return {"messagem": f"Insira os dados do cep manualmente!!"}
+            insert().insert_cep(dadosCep)
+            continue
+        
     insert().insert_endereco(dado)
     return {"messagem":f"Cadastro de endereço para o id_user: {dado.fk_pessoa} feito com sucesso!!"}
-
-@router.post("/cep")
-def cep(dado:tb_cep):
-    
-    insert().insert_cep(dado)
-    return {"teste":"Daniel bonito"}
 
 @router.post("/user")
 def user(dado:tb_user):

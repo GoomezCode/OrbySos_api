@@ -21,20 +21,12 @@ class tb_endereco(BaseModel):
     fk_pessoa:int
     logradouro:str
     bairro:str
-    fk_tpLogradouro:str
-    cep:str
+    fk_tpLogradouro:int
+    cep:int
     cidade:str
     estado:str
     pais:str
     complemento:str
-    data_criacao:str
-
-class tb_cep(BaseModel):
-    logradouro:str
-    bairro:str
-    cidade:str
-    estado:str
-    cep:int
     
 class tb_user(BaseModel):
     fk_pessoa:int

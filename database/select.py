@@ -6,6 +6,7 @@ class select:
         
     def select_all(self, table):
         query = f'select * from {table}'
+        
         self.cursor.execute(query)
         resultado = self.cursor.fetchall()
         self.cursor.close()
@@ -13,6 +14,14 @@ class select:
     
     def select_pessoa_id(self, id):
         query = f'select * from tb_pessoa where id_pessoa = {id}'
+        
+        self.cursor.execute(query)
+        resultado = self.cursor.fetchone()
+        self.cursor.close()
+        return resultado
+    def select_cep_cep(self, cep):
+        query = f'select * from tb_cep where  cep = {cep}'
+        
         self.cursor.execute(query)
         resultado = self.cursor.fetchone()
         self.cursor.close()
