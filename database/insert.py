@@ -66,19 +66,17 @@ class insert:
             endereco.estado,
             endereco.pais,
             endereco.complemento,
-            endereco.data_criacao
+            datetime.now()
         )
         self.execute_sql(query, dados)
-        
-    
-    def insert_cep(self, cep:tb_cep):
-        query = f'''insert into tb_cep ( logradouro,bairro,cidade,estado,cep) values (%s,%s,%s,%s,%s)'''
+    def insert_cep(self, cep):
+        query = f'''insert into tb_cep (logradouro,bairro,cidade,estado,cep) values (%s,%s,%s,%s,%s)'''
         dados = (
-            cep.logradouro,
-            cep.bairro,
-            cep.cidade,
-            cep.estado,
-            cep.cep
+            cep["logradouro"],
+            cep["bairro"],
+            cep["cidade"],
+            cep["estado"],
+            cep["cep"]
         )
         self.execute_sql(query, dados)
     
