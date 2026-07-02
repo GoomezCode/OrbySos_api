@@ -1,6 +1,10 @@
 from database.select import *
+from validate_docbr import CNPJ, CPF
 import requests
 import bcrypt
+
+cnpj = CNPJ()
+cpf = CPF()
 
 # criptografia da senha
 def gerarHash(senha: str) -> str:

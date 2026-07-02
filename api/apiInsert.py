@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from database.insert import *
 from database.select import *
-from util.function import buscarCep, gerarHash
+from util.function import buscarCep, gerarHash, cnpj, cpf
 from classes.classPessoa import *
 
 router = APIRouter(
@@ -29,7 +29,13 @@ def pessoaJuridica(dado:tb_pessoa_juridica):
     if dados[2] == 0:
          raise HTTPException(
             status_code=400, 
-            detail="Usuário não e Pessoa Juridica!!"
+            detail="Usuário não e Pessoa Juridica!!!"
+        )
+         
+    if not cnpj.validate(dado.cnpj):
+        raise HTTPException(
+            status_code=400,
+            detail="CNPJ é inválido!!!"
         )
     
     insert().insert_pessoa_Juridica(dado)
@@ -48,6 +54,12 @@ def pessoaFisica(dado:tb_pessoa_fisica):
          raise HTTPException(
             status_code=400, 
             detail="Usuário não e Pessoa Fisica!!"
+        )
+    
+    if not cpf.validate(dado.cpf):
+        raise HTTPException(
+            status_code=400,
+            detail="CPF é inválido!!"
         )
     
     
