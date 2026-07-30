@@ -61,3 +61,23 @@ class tb_apolice(BaseModel):
     fk_local_pernoite:int
     fk_status:int
     fk_forma_pagamento:int
+
+class tb_ocorrencia(BaseModel):
+    ocorrencia:str
+
+class tb_assistencia(BaseModel):
+    assistencia:str
+
+class tb_apolice_ocorencia(BaseModel):
+    fk_apolice:int
+    fk_ocorrencia:int
+
+class tb_status_ocorrencia(BaseModel):
+    fk_apo_ocorrencia:int
+    status:str
+
+class tb_ocorrencia_assistencia(BaseModel):
+    fk_apo_ocorrencia:int
+    fk_assistencia:int
+    fk_status:int
+    comentario:str
