@@ -62,14 +62,7 @@ class tb_apolice(BaseModel):
     fk_status:int
     fk_forma_pagamento:int
 
-
-class tb_ocorrencia(BaseModel):
-    ocorrencia:str
-
-class tb_assistencia(BaseModel):
-    assistencia:str
-
-class tb_apolice_ocorencia(BaseModel):
+class tb_apolice_ocorrencia(BaseModel):
     fk_apolice:int
     fk_ocorrencia:int
 
