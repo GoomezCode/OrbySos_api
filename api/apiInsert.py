@@ -134,3 +134,4 @@ def veiculo(dado:tb_veiculo):
     
     insert().insert_veiculo(dado)
     return{"messagem":f"O veiculo: {dado.marca} foi cadastrado com sucesso para {dado.fk_pessoa}"}
+
