@@ -108,3 +108,58 @@ class insert:
                 user.blindado
             )  
             self.execute_sql(query, dados)
+
+    def insert_apolice(self, apolice:tb_apolice):
+        query = f'''insert into tb_apolice (numero_apolice, fk_pessoa, fk_veiculo, data_inicio, data_fim, cobertura, 
+        assistencia, endosso, versao, perfil, fk_local_pernoite, fk_status, fk_forma_pagamento) 
+        values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)'''
+        dados = (
+            apolice.numero_apolice,
+            apolice.fk_pessoa,
+            apolice.fk_veiculo,
+            apolice.data_inicio,
+            apolice.data_fim,
+            apolice.cobertura,
+            apolice.assistencia,
+            apolice.endosso,
+            apolice.versao,
+            apolice.perfil,
+            apolice.fk_local_pernoite,
+            apolice.fk_status,
+            apolice.fk_forma_pagamento
+        )
+        self.execute_sql(query, dados)
+    
+    def insert_ocorrencia(self, ocorrencia:str):
+        query = f'''insert into tb_ocorrencia (ocorrencia) values ('{ocorrencia}')'''
+        self.execute_sql(query, [])
+    
+    def insert_assistencia(self, assistencia:str):
+        query = f'''insert into tb_assistencia (assistencia) values ('{assistencia}')'''
+        self.execute_sql(query, [])
+    
+    def insert_apolice_ocorrencia(self, apolice_ocorrencia:tb_apolice_ocorrencia):
+        query = f'''insert into tb_apolice_ocorrencia (fk_apolice, fk_ocorrencia) values (%s,%s)'''
+        dados = (
+            apolice_ocorrencia.fk_apolice,
+            apolice_ocorrencia.fk_ocorrencia
+        )
+        self.execute_sql(query, dados)
+    
+    def insert_status_ocorrencia(self, status_ocorrencia:tb_status_ocorrencia):
+        query = f'''insert into tb_status_ocorrencia (fk_apo_ocorrencia, status) values (%s,%s)'''
+        dados = (
+            status_ocorrencia.fk_apo_ocorrencia,
+            status_ocorrencia.status
+        )
+        self.execute_sql(query, dados)
+    
+    def insert_ocorrencia_assistencia(self, ocorrencia_assistencia:tb_ocorrencia_assistencia):
+        query = f'''insert into tb_ocorrencia_assistencia (fk_apo_ocorrencia, fk_assistencia, fk_status, comentario) values (%s,%s,%s,%s)'''
+        dados = (
+            ocorrencia_assistencia.fk_apo_ocorrencia,
+            ocorrencia_assistencia.fk_assistencia,
+            ocorrencia_assistencia.fk_status,
+            ocorrencia_assistencia.comentario
+        )
+        self.execute_sql(query, dados)

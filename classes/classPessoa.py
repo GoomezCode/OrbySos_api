@@ -15,7 +15,7 @@ class tb_pessoa_fisica(BaseModel):
     data_nascimento:str
     cnh:int
     fk_estado_civil:int
-    fk_Status:int
+    fk_status:int
 
 class tb_endereco(BaseModel):
     fk_pessoa:int
@@ -39,7 +39,7 @@ class tb_veiculo(BaseModel):
     marca:str
     modelo:str
     versao:str
-    ano_fabricacao:int
+    ano_fabricado:int
     ano_modelo:int
     placa:str
     chassi:str
@@ -62,13 +62,7 @@ class tb_apolice(BaseModel):
     fk_status:int
     fk_forma_pagamento:int
 
-class tb_ocorrencia(BaseModel):
-    ocorrencia:str
-
-class tb_assistencia(BaseModel):
-    assistencia:str
-
-class tb_apolice_ocorencia(BaseModel):
+class tb_apolice_ocorrencia(BaseModel):
     fk_apolice:int
     fk_ocorrencia:int
 

@@ -134,3 +134,47 @@ def veiculo(dado:tb_veiculo):
     
     insert().insert_veiculo(dado)
     return{"messagem":f"O veiculo: {dado.marca} foi cadastrado com sucesso para {dado.fk_pessoa}"}
+
+
+@router.post("/ocorrencia/{ocorrencia}")
+def ocorrencia(ocorrencia:str):
+    ocorrencia.lower()
+    dados = select().select_all("tb_ocorrencia")
+    for i in range(len(dados)):
+        if dados[i][1] == ocorrencia:
+            raise HTTPException(
+                status_code=404, 
+                detail="Ocorrência já cadastrada!!!"
+            )
+
+    insert().insert_ocorrencia(ocorrencia)
+    return {"messagem":f"Ocorrência: {ocorrencia} foi cadastrada com sucesso!!"}
+
+@router.post("/assistencia/{assistencia}")
+def assistencia(assistencia:str):
+    assistencia.lower()
+    dados = select().select_all("tb_assistencia")
+    for i in range(len(dados)):
+        if dados[i][1] == assistencia:
+            raise HTTPException(
+                status_code=404, 
+                detail="Assistência já cadastrada!!!"
+            )
+
+    insert().insert_assistencia(assistencia)
+    return {"messagem":f"Assistência: {assistencia} foi cadastrada com sucesso!!"}
+
+@router.post("/apolice_ocorrencia")
+def apolice_ocorrencia(dado:tb_apolice_ocorrencia):
+    insert().insert_apolice_ocorrencia(dado)
+    return {"messagem":f"Apolice Ocorrência: {dado.fk_apolice} {dado.fk_ocorrencia} foi cadastrada com sucesso!!"}
+
+@router.post("/status_ocorrencia")
+def status_ocorrencia(dado:tb_status_ocorrencia):
+    insert().insert_status_ocorrencia(dado)
+    return {"messagem":f"Status Ocorrência: {dado.fk_apo_ocorrencia} {dado.status} foi cadastrada com sucesso!!"}
+
+@router.post("/ocorrencia_assistencia")
+def ocorrencia_assistencia(dado:tb_ocorrencia_assistencia):
+    insert().insert_ocorrencia_assistencia(dado)
+    return {"messagem":f"Ocorrência Assistência: {dado.fk_apo_ocorrencia} {dado.fk_assistencia} foi cadastrada com sucesso!!"}
