@@ -138,10 +138,10 @@ def veiculo(dado:tb_veiculo):
 
 @router.post("/ocorrencia/{ocorrencia}")
 def ocorrencia(ocorrencia:str):
-    ocorrencia.lower()
+    ocorrencia = ocorrencia.lower()
     dados = select().select_all("tb_ocorrencia")
     for i in range(len(dados)):
-        if dados[i][1] == ocorrencia:
+        if dados[i][1].lower() == ocorrencia:
             raise HTTPException(
                 status_code=404, 
                 detail="Ocorrência já cadastrada!!!"
@@ -152,10 +152,10 @@ def ocorrencia(ocorrencia:str):
 
 @router.post("/assistencia/{assistencia}")
 def assistencia(assistencia:str):
-    assistencia.lower()
+    assistencia = assistencia.lower()
     dados = select().select_all("tb_assistencia")
     for i in range(len(dados)):
-        if dados[i][1] == assistencia:
+        if dados[i][1].lower() == assistencia:
             raise HTTPException(
                 status_code=404, 
                 detail="Assistência já cadastrada!!!"
