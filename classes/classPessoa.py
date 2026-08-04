@@ -51,7 +51,7 @@ class tb_veiculo(BaseModel):
 class tb_apolice(BaseModel):
     numero_apolice:int
     fk_pessoa:int
-    fk_seguradora:int
+    fk_segurado:int
     fk_veiculo:int
     data_inicio:str
     data_fim:str
