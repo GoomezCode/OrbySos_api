@@ -2,6 +2,7 @@ from pydantic import BaseModel
     
 class tb_pessoa_juridica(BaseModel):
     id_pj:int
+    isSeguradora:bool   
     razao_social:str
     nome_fantasia:str
     cnpj:str
@@ -50,6 +51,7 @@ class tb_veiculo(BaseModel):
 class tb_apolice(BaseModel):
     numero_apolice:int
     fk_pessoa:int
+    fk_seguradora:int
     fk_veiculo:int
     data_inicio:str
     data_fim:str
@@ -71,7 +73,10 @@ class tb_status_ocorrencia(BaseModel):
     status:str
 
 class tb_ocorrencia_assistencia(BaseModel):
+    descricao:str
+    local:str
+    isMachucado:bool
     fk_apo_ocorrencia:int
     fk_assistencia:int
     fk_status:int
-    comentario:str
+    
