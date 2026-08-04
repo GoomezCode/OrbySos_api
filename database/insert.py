@@ -131,18 +131,12 @@ class insert:
         self.execute_sql(query, dados)
     
     def insert_ocorrencia(self, ocorrencia:str):
-        query = f'''insert into tb_ocorrencia (ocorrencia) values (%s)'''
-        dados = (
-            ocorrencia
-        )
-        self.execute_sql(query, dados)
+        query = f'''insert into tb_ocorrencia (ocorrencia) values ('{ocorrencia}')'''
+        self.execute_sql(query, [])
     
     def insert_assistencia(self, assistencia:str):
-        query = f'''insert into tb_assistencia (assistencia) values (%s)'''
-        dados = (
-            assistencia
-        )
-        self.execute_sql(query, dados)
+        query = f'''insert into tb_assistencia (assistencia) values ('{assistencia}')'''
+        self.execute_sql(query, [])
     
     def insert_apolice_ocorrencia(self, apolice_ocorrencia:tb_apolice_ocorrencia):
         query = f'''insert into tb_apolice_ocorrencia (fk_apolice, fk_ocorrencia) values (%s,%s)'''

@@ -15,7 +15,7 @@ class tb_pessoa_fisica(BaseModel):
     data_nascimento:str
     cnh:int
     fk_estado_civil:int
-    fk_Status:int
+    fk_status:int
 
 class tb_endereco(BaseModel):
     fk_pessoa:int
@@ -39,7 +39,7 @@ class tb_veiculo(BaseModel):
     marca:str
     modelo:str
     versao:str
-    ano_fabricacao:int
+    ano_fabricado:int
     ano_modelo:int
     placa:str
     chassi:str

@@ -141,7 +141,7 @@ def ocorrencia(ocorrencia:str):
     ocorrencia.lower()
     dados = select().select_all("tb_ocorrencia")
     for i in range(len(dados)):
-        if dados[i][2] == ocorrencia:
+        if dados[i][1] == ocorrencia:
             raise HTTPException(
                 status_code=404, 
                 detail="Ocorrência já cadastrada!!!"
@@ -155,7 +155,7 @@ def assistencia(assistencia:str):
     assistencia.lower()
     dados = select().select_all("tb_assistencia")
     for i in range(len(dados)):
-        if dados[i][2] == assistencia:
+        if dados[i][1] == assistencia:
             raise HTTPException(
                 status_code=404, 
                 detail="Assistência já cadastrada!!!"
