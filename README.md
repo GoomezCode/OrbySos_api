@@ -182,7 +182,4 @@ http://localhost:8080
 ### 👤 Autor
 
 Desenvolvido por **[GoomezCode](https://github.com/GoomezCode)**
-
-*Documentação gerada automaticamente com auxílio de IA — sujeita a atualizações.*
-
 </div>
