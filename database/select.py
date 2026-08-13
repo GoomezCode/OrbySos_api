@@ -19,29 +19,15 @@ class select:
         query = f'select * from {table}'
         return self.pesquisarAll(query)
     
-    def select_pessoaJuridica(self):
+    def select_contato_id(self, id):
         query = f'''
-        select tpj.razao_social, tpj.nome_fantasia, tpj.cnpj, ts.status, tp.data_cadastro
-        from tb_pessoa_juridica tpj
-        inner join tb_pessoa tp on tpj.id_pj = tp.id_pessoa
-        inner join tb_status ts on tpj.fk_status = ts.id_status;
+        select tc.tipo_contato, tc.valor_contato, tc.principal, ts.rotulo
+        from tb_contato tc
+        inner join tb_status ts on tc.fk_status = ts.id_status
+        where fk_pessoa = {id}
         '''
         return self.pesquisarAll(query)
     
-    def select_pessoaFisica(self):
-        query = f'''
-        select tpf.nome, tpf.cpf, ts.sexo, tpf.data_nascimento, tpf.cnh, tec.estado, tst.status
-        from tb_pessoa_fisica tpf
-        inner join tb_sexo ts on tpf.fk_sexo = ts.id_sexo
-        inner join tb_estado_civil tec on tpf.fk_estado_civil = tec.id_estado_civil
-        inner join tb_status tst on tpf.fk_status = tst.id_status;
-        '''
+    def select_cliente_pf(self):
+        query = 'select tpf.id_pf, tpf.nome, tpf.cpf, tpf.data_nascimento from tb_pessoa_fisica tpf'
         return self.pesquisarAll(query)
-    
-    def select_pessoa_id(self, id):
-        query = f'select * from tb_pessoa where id_pessoa = {id}'
-        return self.pesquisarOne(query)
-    
-    def select_cep_cep(self, cep):
-        query = f'select * from tb_cep where  cep = {cep}'
-        return self.pesquisarOne(query)

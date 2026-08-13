@@ -166,7 +166,7 @@ def assistencia(assistencia:str):
 
 @router.post("/apolice_ocorrencia")
 def apolice_ocorrencia(dado:tb_apolice_ocorrencia):
-    insert().insert_apolice_ocorrencia(dado)
+    insert().insert_apolice_ocorrencia(dado) 
     return {"messagem":f"Apolice Ocorrência: {dado.fk_apolice} {dado.fk_ocorrencia} foi cadastrada com sucesso!!"}
 
 @router.post("/status_ocorrencia")
