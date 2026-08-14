@@ -31,3 +31,7 @@ class select:
     def select_cliente_pf(self):
         query = 'select tpf.id_pf, tpf.nome, tpf.cpf, tpf.data_nascimento from tb_pessoa_fisica tpf'
         return self.pesquisarAll(query)
+
+    def select_cliente_pj(self):
+        query = "select tpj.id_pj, tpj.razao_social, tpj.nome_fantasia, tpj.cnpj from tb_pessoa_juridica tpj"
+        return self.pesquisarAll(query)

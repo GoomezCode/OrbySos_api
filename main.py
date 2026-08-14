@@ -8,7 +8,6 @@ app.include_router(apiConsulta.router)
 app.include_router(apiInsert.router)
 app.include_router(apiCliente.router)
 
-@app.get("/")
 def raiz():
     return {"mensagem":"api inicializada..."}
 
