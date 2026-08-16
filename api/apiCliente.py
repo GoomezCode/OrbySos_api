@@ -10,9 +10,9 @@ router = APIRouter(
 @router.get("/me")
 def me():    
     fisica = []
-    for i in select().select_cliente_pf():
+    for i in select_cliente().pf():
         contatos = []
-        for j in select().select_contato_id(i[0]):
+        for j in select_cliente().contato_id(i[0]):
             contatos.append({"tipo": j[0], "valor_mascarado": j[1], "principal": j[2]})
 
         fisicaJson ={
@@ -26,9 +26,9 @@ def me():
         fisica.append(fisicaJson)
 
     juridica = []
-    for i in select().select_cliente_pj():
+    for i in select_cliente().pj():
         contatos = []
-        for j in select().select_contato_id(i[0]):
+        for j in select_cliente().contato_id(i[0]):
             contatos.append({"tipo": j[0], "valor_mascarado": j[1], "principal": j[2]})
 
         juridicaJson = {
@@ -60,14 +60,14 @@ def me():
 @router.get("/me/apolices")
 def me_apolices():
     items = []
-    for i in select().select_cliente_apolice():
-        solicitacao = select().select_cliente_apolice_solicitacao_id(i[0])[0]
+    for i in select_cliente().apolice():
+        solicitacao = select_cliente().apolice_solicitacao_id(i[0])[0]
         if str(solicitacao[2]).lower() == "concluido" or str(solicitacao[2]).lower() == "recusado":
             isAtiva = False
         else: isAtiva = True    
 
         contatos = []
-        for j in select().select_contato_id(i[8]):
+        for j in select_cliente().contato_id(i[8]):
             contatos.append({"tipo": j[0], "valor_mascarado": j[1], "principal": j[2]})
 
         veiculo = {
@@ -118,4 +118,31 @@ def me_apolices():
 
 @router.get("/me/solicitacoes")
 def me_solicitacoes():
-    return "hello"
+    items = []
+    for i in select_cliente().solicitacao():
+        solicitacao = {
+            "id_solicitacao": i[0],
+            "numero_solicitacao": i[1],
+            "status": i[2],
+            "prioridade": i[3],
+            "descricao_evento": i[4],
+            "possui_feridos": i[5],
+            "risco_imediato": i[6],
+            "data_recebimento": i[7],
+            "data_decisao": i[8],
+            "motivo_recusa": i[9],
+            "version": i[10],
+            "veiculo": { "id_veiculo": i[11], "marca": i[12], "modelo": i[13], "ano_modelo": i[14], "placa_mascarada": i[15]},
+             "ocorrencia": { "id_tipo_ocorrencia": i[16], "codigo": i[17], "nome": i[17] }
+        }
+        items.append(solicitacao)
+
+    json = {
+        "schema_version":2,
+        "request_query": {"status": "RECEBIDA", "active_only": False, "page": 1, "page_size": 20},
+        "response": {
+            "items":items,
+            "pagination": {"page":1, "page_size":20, "total_items":1, "total_pages":1}
+        }
+    }
+    return json
