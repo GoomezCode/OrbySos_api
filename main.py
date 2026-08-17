@@ -20,3 +20,7 @@ if __name__ == "__main__":
 # /admin/solicitacoes
 
 # mudar o formato dos status das ocorrencias com codigo - Nome - descricao
+# mudar o formato dos status do tipo assistencia com Codigo - nome
+
+# entender o status da tabela Historico_status no database - talvez trocar para um fk_status
+# sugerir colocar uma coluna de "isAtivo" na tb_assistencia

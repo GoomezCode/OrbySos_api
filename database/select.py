@@ -111,7 +111,7 @@ class select_admin:
             te.logradouro, te.cidade, te.estado, te.complemento, tst.codigo, ts.data_criacao_cliente, ts.data_recebimento, ts.data_decisao, ts.motivo_recusa, ts.version,
             tpf.id_pf, tpf.nome, tpf.cpf, ta.id_apolice, ta.numero_apolice, ta.data_inicio, ta.data_fim, tsta.codigo,
             tv.id_veiculo, tv.marca, tv.modelo, tv.ano_fabricado,tv.ano_modelo, tv.placa, tv.blindado,
-            tpj.id_pj, tpj.nome_fantasia
+            tpj.id_pj, tpj.nome_fantasia, toc.id_ocorrencia, toc.ocorrencia, tu.id_user, tu.login
             from tb_solicitacao ts
             inner join tb_endereco te on ts.fk_local = te.id_endereco
             inner join tb_status tst on ts.fk_status = tst.id_status
@@ -120,6 +120,33 @@ class select_admin:
             inner join tb_status tsta on ta.fk_status = tsta.id_status
             inner join tb_veiculo tv on ts.fk_veiculo = tv.id_veiculo
             inner join tb_pessoa_juridica tpj on ts.fk_seguradora = tpj.id_pj
+            inner join tb_ocorrencia toc on ts.fk_tipo_ocorrencia = toc.id_ocorrencia
+            inner join tb_user tu on ts.fk_analista_responsavel = tu.id_user
             where ta.id_apolice = {id}'''
         return select().pesquisarOne(query)
+    def solicitacao_assistencia_idSolicitacao(query, id):
+        query = f'''select
+        tsa.id_solicitacao_assistencia, tpa.id_tpAssistencia,tpa.assistencia,
+        ts.codigo, tsa.comentario, tu.id_user, tu.login, tsa.data_inclusao, tsa.data_atualizacao, tsa.version
+        from tb_solicitacao_assistencia tsa
+        inner join tb_assistencia ta on tsa.fk_assistencia = ta.id_assistencia
+        inner join tb_tpAssistencia tpa on ta.fk_id_tpAssistencia = tpa.id_tpAssistencia
+        inner join tb_status ts on ta.fk_status = ts.id_status
+        inner join tb_user tu on tsa.fk_usuario_responsavel = tu.id_user
+        where tsa.fk_solicitacao = {id}'''
+        return select().pesquisarAll(query)
+    def historico_idSolicitacao(query, id):
+        query = f'''select
+        hs.id_historico, hs.status, hs.data_status, tu.id_user, tu.login, hs.comentario
+        from historico_status hs
+        inner join tb_user tu on hs.fk_usuario_responsavel = tu.id_user
+        where hs.fk_solicitacao = {id}'''
+        return select().pesquisarAll(query)
+    def tipos_assistencia_disponiveis(query):
+        query = '''select
+        ta.id_assistencia, tpa.assistencia, ta.nome, ta.descricao, ts.codigo
+        from tb_assistencia ta
+        inner join tb_tpAssistencia tpa on ta.fk_id_tpAssistencia = tpa.id_tpAssistencia
+        inner join tb_status ts on ta.fk_status = ts.id_status'''
+        return select().pesquisarAll(query)
         

@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException
-from database.select import *
+from database.select import select_admin
 from classes.classPessoa import *
 
 router = APIRouter(
@@ -109,6 +109,39 @@ def solicitacoes():
 @router.get("/solicitacoes/{solicitacao_id}")
 def solicitacoes_id(solicitacao_id:int):
     dado_solicitacao = select_admin() .solicitacao_id(solicitacao_id)
+    assistencias = []
+    for i in select_admin().solicitacao_assistencia_idSolicitacao(dado_solicitacao[0]):
+        assistencias.append({
+        "id_solicitacao_assistencia": i[0],
+        "tipo": { "id_tipo_assistencia": i[1], "codigo": i[2], "nome": i[2] },
+        "status": i[3],
+        "comentario": i[4],
+        "responsavel": { "id_usuario": i[5], "nome_exibicao": i[6] },
+        "data_inclusao": i[7],
+        "data_atualizacao": i[8],
+        "version": i[8]
+        })
+
+        historico = []
+        for i in select_admin().historico_idSolicitacao(dado_solicitacao[0]):
+            historico.append({
+                "id_historico": i[0], 
+                "status": i[1], 
+                "data_status": i[2],
+                "responsavel": { "id_usuario": i[3], "nome_exibicao": i[4] }, 
+                "comentario": i[5]
+            })
+
+        tipos_assistencia_disponiveis = []
+        for i in select_admin().tipos_assistencia_disponiveis():
+            tipos_assistencia_disponiveis.append({
+                "id_tipo_assistencia": i[0], 
+                "codigo": i[1], 
+                "nome": i[2], 
+                "descricao": i[3], 
+                "ativo": i[4]
+            })
+
     json = {
         "schema_version": 2,
         "response":{
@@ -132,13 +165,13 @@ def solicitacoes_id(solicitacao_id:int):
             "apolice": {"id_apolice": dado_solicitacao[20], "numero_apolice_mascarado": dado_solicitacao[21], "data_inicio": dado_solicitacao[22], "data_fim": dado_solicitacao[23], "status": dado_solicitacao[24]},
             "veiculo": {"id_veiculo": dado_solicitacao[25], "marca": dado_solicitacao[26], "modelo": dado_solicitacao[27], "ano_fabricacao": dado_solicitacao[28], "ano_modelo": dado_solicitacao[29], "placa_mascarada": dado_solicitacao[30], "blindado": dado_solicitacao[31]},
             "seguradora": { "id_pj": dado_solicitacao[32], "nome_fantasia": dado_solicitacao[33] },
-            "ocorrencia": {"id_tipo_ocorrencia": 1, "codigo": "PANE_MECANICA", "nome": "Pane mecanica", "descricao": "Falha mecanica que impede a continuidade da viagem."},
-            "analista":{"id_usuario": 901, "nome_exibicao": "Analista Horizonte"},
-            "assistencias":[],
+            "ocorrencia": {"id_tipo_ocorrencia": dado_solicitacao[34], "codigo": dado_solicitacao[35], "nome": dado_solicitacao[35], "descricao": dado_solicitacao[35]},
+            "analista":{"id_usuario": dado_solicitacao[36], "nome_exibicao": dado_solicitacao[37]},
+            "assistencias":assistencias,
             # Entender como funciona essa perguntas (talvez criar uma tabela para ela)
             "perguntas": [{ "id_pergunta": 7001, "origem": "GUINCHO", "tipo": "TAXI", "status": "PENDENTE", "necessita_taxi": None, "quantidade_passageiros": None, "necessita_acessibilidade": None, "quantidade_criancas": None, "quantidade_animais": None, "bagagem": None, "observacoes": None, "data_criacao": "2026-08-06T12:11:01Z", "data_resposta": None, "version": 1 }],
-            "historico":[],
-            "tipos_assistencia_disponiveis":[]
+            "historico": historico,
+            "tipos_assistencia_disponiveis":tipos_assistencia_disponiveis
         }
     }
     return json

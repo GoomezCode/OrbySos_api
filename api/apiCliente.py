@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException
-from database.select import *
+from database.select import select_cliente
 from classes.classPessoa import *
 
 router = APIRouter(
