@@ -24,7 +24,7 @@ def dashboard():
         apolice = { "id_apolice": i[9], "numero_apolice_mascarado": i[10]}
         veiculo = { "id_veiculo": i[11], "marca": i[12], "modelo": i[13], "ano_modelo": i[14], "placa_mascarada": i[15] }
         seguradora = { "id_pj": i[16], "nome_fantasia": i[17] }
-        ocorrencia = { "id_tipo_ocorrencia": i[18], "codigo": i[19], "nome": i[19] }
+        ocorrencia = { "id_tipo_ocorrencia": i[18], "codigo": i[19], "nome": i[20] }
         items.append({
           "id_solicitacao": i[0],
           "numero_solicitacao": i[1],
@@ -74,7 +74,7 @@ def solicitacoes():
         apolice = { "id_apolice": i[14], "numero_apolice_mascarado": i[15] }
         veiculo = { "id_veiculo": i[16], "marca": i[17], "modelo": i[18], "ano_modelo": i[19], "placa_mascarada": i[20] }
         seguradora = { "id_pj": i[21], "nome_fantasia": i[22] }
-        ocorrencia = { "id_tipo_ocorrencia": i[23], "codigo": i[24], "nome": i[24] }
+        ocorrencia = { "id_tipo_ocorrencia": i[23], "codigo": i[24], "nome": i[25] }
 
         items.append({
             "id_solicitacao": i[0],
@@ -113,13 +113,13 @@ def solicitacoes_id(solicitacao_id:int):
     for i in select_admin().solicitacao_assistencia_idSolicitacao(dado_solicitacao[0]):
         assistencias.append({
         "id_solicitacao_assistencia": i[0],
-        "tipo": { "id_tipo_assistencia": i[1], "codigo": i[2], "nome": i[2] },
-        "status": i[3],
-        "comentario": i[4],
-        "responsavel": { "id_usuario": i[5], "nome_exibicao": i[6] },
-        "data_inclusao": i[7],
-        "data_atualizacao": i[8],
-        "version": i[8]
+        "tipo": { "id_tipo_assistencia": i[1], "codigo": i[2], "nome": i[3] },
+        "status": i[4],
+        "comentario": i[5],
+        "responsavel": { "id_usuario": i[6], "nome_exibicao": i[7] },
+        "data_inclusao": i[8],
+        "data_atualizacao": i[9],
+        "version": i[10]
         })
 
         historico = []
@@ -165,13 +165,48 @@ def solicitacoes_id(solicitacao_id:int):
             "apolice": {"id_apolice": dado_solicitacao[20], "numero_apolice_mascarado": dado_solicitacao[21], "data_inicio": dado_solicitacao[22], "data_fim": dado_solicitacao[23], "status": dado_solicitacao[24]},
             "veiculo": {"id_veiculo": dado_solicitacao[25], "marca": dado_solicitacao[26], "modelo": dado_solicitacao[27], "ano_fabricacao": dado_solicitacao[28], "ano_modelo": dado_solicitacao[29], "placa_mascarada": dado_solicitacao[30], "blindado": dado_solicitacao[31]},
             "seguradora": { "id_pj": dado_solicitacao[32], "nome_fantasia": dado_solicitacao[33] },
-            "ocorrencia": {"id_tipo_ocorrencia": dado_solicitacao[34], "codigo": dado_solicitacao[35], "nome": dado_solicitacao[35], "descricao": dado_solicitacao[35]},
-            "analista":{"id_usuario": dado_solicitacao[36], "nome_exibicao": dado_solicitacao[37]},
+            "ocorrencia": {"id_tipo_ocorrencia": dado_solicitacao[34], "codigo": dado_solicitacao[35], "nome": dado_solicitacao[36], "descricao": dado_solicitacao[37]},
+            "analista":{"id_usuario": dado_solicitacao[38], "nome_exibicao": dado_solicitacao[39]},
             "assistencias":assistencias,
             # Entender como funciona essa perguntas (talvez criar uma tabela para ela)
-            "perguntas": [{ "id_pergunta": 7001, "origem": "GUINCHO", "tipo": "TAXI", "status": "PENDENTE", "necessita_taxi": None, "quantidade_passageiros": None, "necessita_acessibilidade": None, "quantidade_criancas": None, "quantidade_animais": None, "bagagem": None, "observacoes": None, "data_criacao": "2026-08-06T12:11:01Z", "data_resposta": None, "version": 1 }],
+            "perguntas": [{ 
+                "id_pergunta": 7001, 
+                "origem": "GUINCHO", 
+                "tipo": "TAXI", 
+                "status": "PENDENTE", 
+                "necessita_taxi": None, 
+                "quantidade_passageiros": None,
+                "necessita_acessibilidade": None, 
+                "quantidade_criancas": None, 
+                "quantidade_animais": None, 
+                "bagagem": None, 
+                "observacoes": None, 
+                "data_criacao": "2026-08-06T12:11:01Z", 
+                "data_resposta": None, 
+                "version": 1
+                }],
             "historico": historico,
             "tipos_assistencia_disponiveis":tipos_assistencia_disponiveis
+        }
+    }
+    return json
+
+@router.get("/tipos-assistencia")
+def tipos_assistencia():
+    items =[]
+    for i in select_admin().tipos_assistencia():
+        items.append({
+            "id_tipo_assistencia": i[0],
+            "codigo": i[1],
+            "nome": i[2],
+            "descricao": i[3],
+            "ativo": i[4]
+        })
+    json = {
+        "schema_version": 2,
+        "request_query": { "ativo": True },
+        "response": {
+            "items":items
         }
     }
     return json

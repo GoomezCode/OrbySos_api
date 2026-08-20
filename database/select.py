@@ -66,7 +66,7 @@ class select_cliente:
         ts.id_solicitacao, ts.protocolo_solicitacao, tst.codigo, ts.prioridade, ts.descricao_evento,
         ts.possui_feridos, ts.risco_imediato, ts.data_recebimento, ts.data_decisao, ts.motivo_recusa, ts.version,
         tv.id_veiculo, tv.marca, tv.modelo, tv.ano_modelo, tv.placa,
-        toc.id_ocorrencia,toc.ocorrencia
+        toc.id_ocorrencia,toc.codigo, toc.nome
         from tb_solicitacao ts
         inner join tb_status tst on ts.fk_status = tst.id_status
         inner join tb_veiculo tv on ts.fk_veiculo = tv.id_veiculo
@@ -81,7 +81,7 @@ class select_admin:
         ts.id_solicitacao, ts.protocolo_solicitacao, ts.prioridade, tst.codigo, ts.data_recebimento, ts.version,
         tpf.id_pf, tpf.nome, tpf.cpf, ta.id_apolice, ta.numero_apolice,
         tv.id_veiculo, tv.marca, tv.modelo, tv.ano_modelo, tv.placa,
-        tpj.id_pj, tpj.nome_fantasia, toc.id_ocorrencia,toc.ocorrencia
+        tpj.id_pj, tpj.nome_fantasia, toc.id_ocorrencia,toc.codigo, toc.nome
         from tb_solicitacao ts
         inner join tb_status tst on ts.fk_status = tst.id_status
         inner join tb_pessoa_fisica tpf on ts.fk_pessoa = tpf.id_pf
@@ -96,7 +96,7 @@ class select_admin:
         tst.codigo, ts.data_recebimento, ts.data_decisao, ts.motivo_recusa, ts.version,
         tpf.id_pf, tpf.nome, tpf.cpf, ta.id_apolice, ta.numero_apolice,
         tv.id_veiculo, tv.marca, tv.modelo, tv.ano_modelo, tv.placa,
-        tpj.id_pj, tpj.nome_fantasia, toc.id_ocorrencia,toc.ocorrencia
+        tpj.id_pj, tpj.nome_fantasia, toc.id_ocorrencia,toc.codigo, toc.nome
         from tb_solicitacao ts
         inner join tb_status tst on ts.fk_status = tst.id_status
         inner join tb_pessoa_fisica tpf on ts.fk_pessoa = tpf.id_pf
@@ -111,7 +111,7 @@ class select_admin:
             te.logradouro, te.cidade, te.estado, te.complemento, tst.codigo, ts.data_criacao_cliente, ts.data_recebimento, ts.data_decisao, ts.motivo_recusa, ts.version,
             tpf.id_pf, tpf.nome, tpf.cpf, ta.id_apolice, ta.numero_apolice, ta.data_inicio, ta.data_fim, tsta.codigo,
             tv.id_veiculo, tv.marca, tv.modelo, tv.ano_fabricado,tv.ano_modelo, tv.placa, tv.blindado,
-            tpj.id_pj, tpj.nome_fantasia, toc.id_ocorrencia, toc.ocorrencia, tu.id_user, tu.login
+            tpj.id_pj, tpj.nome_fantasia, toc.id_ocorrencia, toc.codigo, toc.nome, toc.descricao, tu.id_user, tu.login
             from tb_solicitacao ts
             inner join tb_endereco te on ts.fk_local = te.id_endereco
             inner join tb_status tst on ts.fk_status = tst.id_status
@@ -126,7 +126,7 @@ class select_admin:
         return select().pesquisarOne(query)
     def solicitacao_assistencia_idSolicitacao(query, id):
         query = f'''select
-        tsa.id_solicitacao_assistencia, tpa.id_tpAssistencia,tpa.assistencia,
+        tsa.id_solicitacao_assistencia, tpa.id_tpAssistencia, tpa.codigo, tpa.nome,
         ts.codigo, tsa.comentario, tu.id_user, tu.login, tsa.data_inclusao, tsa.data_atualizacao, tsa.version
         from tb_solicitacao_assistencia tsa
         inner join tb_assistencia ta on tsa.fk_assistencia = ta.id_assistencia
@@ -144,9 +144,9 @@ class select_admin:
         return select().pesquisarAll(query)
     def tipos_assistencia_disponiveis(query):
         query = '''select
-        ta.id_assistencia, tpa.assistencia, ta.nome, ta.descricao, ts.codigo
-        from tb_assistencia ta
-        inner join tb_tpAssistencia tpa on ta.fk_id_tpAssistencia = tpa.id_tpAssistencia
-        inner join tb_status ts on ta.fk_status = ts.id_status'''
+        tpa.id_tpAssistencia, tpa.codigo, tpa.nome, tpa.descricao, tpa.ativo
+        from  tb_tpAssistencia tpa'''
         return select().pesquisarAll(query)
+    def tipos_assistencia(self):
+        return select().select_all("tb_tpAssistencia")
         

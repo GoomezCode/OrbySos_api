@@ -133,7 +133,7 @@ def me_solicitacoes():
             "motivo_recusa": i[9],
             "version": i[10],
             "veiculo": { "id_veiculo": i[11], "marca": i[12], "modelo": i[13], "ano_modelo": i[14], "placa_mascarada": i[15]},
-             "ocorrencia": { "id_tipo_ocorrencia": i[16], "codigo": i[17], "nome": i[17] }
+             "ocorrencia": { "id_tipo_ocorrencia": i[16], "codigo": i[17], "nome": i[18] }
         }
         items.append(solicitacao)
 
