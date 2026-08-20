@@ -1,10 +1,10 @@
 from fastapi import FastAPI
 import uvicorn
-from api import apiConsulta,apiInsert, apiCliente, apiAdmin
+from api import api,apiInsert, apiCliente, apiAdmin
 
 app = FastAPI()
 
-app.include_router(apiConsulta.router)
+app.include_router(api.router)
 app.include_router(apiInsert.router)
 app.include_router(apiCliente.router)
 app.include_router(apiAdmin.router)

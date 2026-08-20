@@ -18,6 +18,34 @@ class select:
     def select_all(self, table):
         query = f'select * from {table}'
         return self.pesquisarAll(query)
+
+    def solicitacoes_id(self, id):
+        query = f'''select 
+            ts.id_solicitacao, ts.id_solicitacao_cliente, ts.protocolo_solicitacao, ts.descricao_evento, ts.possui_feridos,
+            ts.risco_imediato, ts.prioridade, te.logradouro, te.cidade, te.estado, te.complemento, tst.codigo, ts.data_criacao_cliente,
+            ts.data_recebimento, ts.data_decisao, ts.motivo_recusa, ts.version,
+
+            tpf.id_pf, tpf.nome, tpf.cpf, ta.id_apolice, ta.numero_apolice, ta.data_inicio, ta.data_fim, tst_ta.codigo,
+            tv.id_veiculo, tv.marca, tv.modelo, tv.versao, tv.ano_fabricado, tv.ano_modelo, tv.placa, tv.blindado,
+            tpj.id_pj, tpj.nome_fantasia, toc.id_ocorrencia, toc.codigo, toc.nome, toc.descricao, tu.id_user, tu.login
+            from tb_solicitacao ts
+            inner join tb_endereco te on ts.fk_local = te.id_endereco
+            inner join tb_apolice ta on ts.fk_apolice = ta.id_apolice
+            inner join tb_status tst on ts.fk_status = tst.id_status
+            inner join tb_status tst_ta on ta.fk_status = tst_ta.id_status
+            inner join tb_pessoa_fisica tpf on ts.fk_pessoa = tpf.id_pf
+            inner join tb_veiculo tv on ts.fk_veiculo = tv.id_veiculo
+            inner join tb_pessoa_juridica tpj on ts.fk_seguradora = tpj.id_pj
+            inner join tb_ocorrencia toc on ts.fk_tipo_ocorrencia = toc.id_ocorrencia
+            inner join tb_user tu on ts.fk_analista_responsavel = tu.id_user
+            where ts.id_solicitacao = {id}'''    
+        return self.pesquisarOne(query)
+    
+    def contato_pj(self, id_pj):
+       query = f'''select
+        tc.tipo_contato, tc.rotulo, tc.valor_contato
+        from tb_contato tc WHERE fk_pessoa = {id_pj}'''
+       return self.pesquisarAll(query)
     
 class select_cliente:
     def __init__(self):
