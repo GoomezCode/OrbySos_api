@@ -49,7 +49,7 @@ class insert:
             pessoa_fisica.data_nascimento,
             pessoa_fisica.cnh,
             pessoa_fisica.fk_estado_civil,
-            pessoa_fisica.fk_Status
+            pessoa_fisica.fk_status
         )
         self.execute_sql(query, dados)
         
@@ -99,7 +99,7 @@ class insert:
                 user.marca,
                 user.modelo,
                 user.versao,
-                user.ano_fabricacao,
+                user.ano_fabricado,
                 user.ano_modelo,
                 user.placa,
                 user.chassi,
@@ -155,11 +155,13 @@ class insert:
         self.execute_sql(query, dados)
     
     def insert_ocorrencia_assistencia(self, ocorrencia_assistencia:tb_ocorrencia_assistencia):
-        query = f'''insert into tb_ocorrencia_assistencia (fk_apo_ocorrencia, fk_assistencia, fk_status, comentario) values (%s,%s,%s,%s)'''
+        query = f'''insert into tb_ocorrencia_assistencia(descricao, local, isMachucado, fk_apo_ocorrencia, fk_assistencia, fk_status) values (%s,%s,%s,%s,%s,%s)'''
         dados = (
+            ocorrencia_assistencia.descricao,
+            ocorrencia_assistencia.local,
+            ocorrencia_assistencia.isMachucado,
             ocorrencia_assistencia.fk_apo_ocorrencia,
             ocorrencia_assistencia.fk_assistencia,
-            ocorrencia_assistencia.fk_status,
-            ocorrencia_assistencia.comentario
+            ocorrencia_assistencia.fk_status
         )
         self.execute_sql(query, dados)
