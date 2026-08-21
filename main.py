@@ -1,13 +1,14 @@
 from fastapi import FastAPI
 import uvicorn
-from api import api,apiInsert, apiCliente, apiAdmin
+from api import apiMain,apiInsert, apiCliente, apiAdmin, apiAuth
 
 app = FastAPI()
 
-app.include_router(api.router)
+app.include_router(apiMain.router)
 app.include_router(apiInsert.router)
 app.include_router(apiCliente.router)
 app.include_router(apiAdmin.router)
+app.include_router(apiAuth.router)
 
 def raiz():
     return {"mensagem":"api inicializada..."}

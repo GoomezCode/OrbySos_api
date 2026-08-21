@@ -58,6 +58,35 @@ def solicitacoes_id(solicitacao_id:int):
                 })
     else: contato = None
 
+    perguntas = []
+    for i in select().selicitacoes_perguntas(solicitacao[0]):
+        perguntas.append({
+            "id_pergunta": i[0],
+            "origem": i[1],
+            "tipo": i[2],
+            "status": i[3],
+            "necessita_taxi": i[4],
+            "quantidade_passageiros": i[5],
+            "necessita_acessibilidade": i[6],
+            "quantidade_criancas": i[7],
+            "quantidade_animais": i[8],
+            "bagagem": i[9],
+            "observacoes": i[10],
+            "data_criacao": i[11],
+            "data_resposta": i[12],
+            "version": 1
+        })
+
+    historico = []
+    for i in select().solicitacao_historico(solicitacao[0]):
+        historico.append({
+            "id_historico": i[0], 
+            "status": i[1], 
+            "data_status": i[2],
+            "responsavel": { "id_usuario": i[3], "nome_exibicao": i[4] }, 
+            "comentario": i[5]
+        })
+
     json = {
         "schema_version": 2,
         "response": {
@@ -87,8 +116,9 @@ def solicitacoes_id(solicitacao_id:int):
             },
             "ocorrencia": { "id_tipo_ocorrencia": solicitacao[35], "codigo": solicitacao[36], "nome": solicitacao[37], "descricao": solicitacao[38] },
             "analista": { "id_usuario": solicitacao[39], "nome_exibicao": solicitacao[40] },
-
-            # terminar d construir o Json
+            "perguntas":perguntas,
+            "historico":historico
+            
         }
     }
     return json

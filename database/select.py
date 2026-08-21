@@ -46,6 +46,19 @@ class select:
         tc.tipo_contato, tc.rotulo, tc.valor_contato
         from tb_contato tc WHERE fk_pessoa = {id_pj}'''
        return self.pesquisarAll(query)
+
+    def selicitacoes_perguntas(self, id_solicitacao):
+        query = f'''select
+        tp.id_pergunta, ta.nome, tpa.codigo, ts.codigo, tp.necessita_taxi, tp.qtd_passageiros, tp.necessita_acessibilidade, tp.qtd_criancas,
+        tp.qtd_animais, tp.bagagem, tp.observacoes, tp.data_criacao, tp.data_resposta
+        from tb_pergunta tp
+        inner join tb_status ts on tp.fk_status = ts.id_status
+        inner join tb_assistencia ta on tp.fk_assistencia = ta.id_assistencia
+        inner join tb_tpAssistencia tpa on ta.fk_id_tpAssistencia = tpa.id_tpAssistencia
+        WHERE tp.fk_solicitacao = {id_solicitacao}'''
+        return self.pesquisarAll(query)
+    def solicitacao_historico(self, id_solicitacao):
+        return select_admin().historico_idSolicitacao(id_solicitacao)
     
 class select_cliente:
     def __init__(self):
