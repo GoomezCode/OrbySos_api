@@ -25,7 +25,7 @@ a um SOS de seguradora.
 A API possui **autenticação por JWT**, dois perfis de acesso (CLIENTE e ANALISTA),
 conexão com banco **MySQL** (pool de conexões), sincronização em tempo real via
 **Server-Sent Events (SSE)**, integração à [BrasilAPI](https://brasilapi.com.br/)
-para consulta automática de **CEP** e mais de **130 testes automatizados**.
+para consulta automática de **CEP** e mais de **160 testes automatizados**.
 
 </div>
 
@@ -72,10 +72,37 @@ OrbySos_api/
 ├── repositories/          # Acesso a dados (SQL parameterizado, bump de revisão)
 ├── schemas/               # Modelos Pydantic
 ├── middleware/            # auth (Bearer token JWT)
-├── tests/                 # 136 testes (pytest) + smoke
+├── tests/                 # 162 testes (pytest) + smoke
 ├── .env.example           # Variáveis de ambiente de exemplo
 └── requeriments.txt       # Dependências do projeto
 ```
+
+### 📚 Documentação técnica
+
+A documentação completa do projeto fica na pasta [`docs/`](../docs/) na raiz do
+workspace. É o registro de cada fase de implementação da API:
+
+| Doc | Conteúdo |
+|:---|:---|
+| [`PLANO_IMPLEMENTACAO_API.md`](../docs/PLANO_IMPLEMENTACAO_API.md) | Plano mestre + status de todas as fases |
+| [`FASE0_ANALISE_SCHEMA_MYSQL.md`](../docs/FASE0_ANALISE_SCHEMA_MYSQL.md) | Correções críticas do schema MySQL (16 ações) |
+| [`FASE1_ANALISE_INFRAESTRUTURA.md`](../docs/FASE1_ANALISE_INFRAESTRUTURA.md) | Infraestrutura (prefixo `/api/v1`, pooling, JWT, middleware) |
+| [`FASE2_ANALISE_AUTENTICACAO.md`](../docs/FASE2_ANALISE_AUTENTICACAO.md) | Autenticação (login cliente/analista, `/me`, logout) |
+| [`FASE3_ANALISE_CATALOGOS.md`](../docs/FASE3_ANALISE_CATALOGOS.md) | Catálogos (`tipos-ocorrencia`, `configuracoes/publicas`) |
+| [`FASE4_ANALISE_CLIENTE.md`](../docs/FASE4_ANALISE_CLIENTE.md) | Área do cliente (apólices, solicitações) |
+| [`FASE5_ANALISE_PERGUNTAS_TAXI.md`](../docs/FASE5_ANALISE_PERGUNTAS_TAXI.md) | Pergunta/passageiro (resposta de táxi) |
+| [`FASE6_ANALISE_ADMIN.md`](../docs/FASE6_ANALISE_ADMIN.md) | Área do analista (fila, transições de estado) |
+| [`FASE7_ANALISE_SYNC.md`](../docs/FASE7_ANALISE_SYNC.md) | Sincronização (SSE `/sync/version` e `/sync/events`) |
+| [`FASE8_SESSAO.md`](../docs/FASE8_SESSAO.md) | Validação de contratos e testes (136) |
+| [`FASE8_1_VALIDACAO_CONTRATOS.md`](../docs/FASE8_1_VALIDACAO_CONTRATOS.md) | Divergências reais corrigidas vs contratos |
+| [`FASE8_5_AUDITORIA_SQL_INJECTION.md`](../docs/FASE8_5_AUDITORIA_SQL_INJECTION.md) | Auditoria de SQL Injection (57 queries, todas seguras) |
+| [`FASE9_ANALISE_APOLICES.md`](../docs/FASE9_ANALISE_APOLICES.md) | CRUD administrativo de apólice |
+| [`FASE9_PENDENCIAS_ROADMAP.md`](../docs/FASE9_PENDENCIAS_ROADMAP.md) | Pendências do roadmap (DER, CI/CD) |
+| [`DER.md`](../docs/DER.md) | Diagrama entidade-relacionamento (Mermaid) |
+| [`SEED_DADOS_TESE.md`](../docs/SEED_DADOS_TESE.md) | Seed de dados de demonstração (`seed_dados_teste.sql`) |
+
+> A pasta `docs/` também pode conter logs de operações recentes (ex. seed de dados,
+> validação ponta-a-ponta contra MySQL real), conforme o padrão `FASE{n}_*`.
 
 ---
 
@@ -127,6 +154,17 @@ JWT_EXPIRE_SECONDS=3600
 
 O schema MySQL completo está no arquivo `../database_estrutura.sql` (na raiz do
 workspace, banco `orbyt`). Importe-o antes da primeira execução.
+
+Para popular o banco com os **dados de demonstração** (usuários, apólices, veículos,
+seguradoras) e permitir login nos endpoints, importe também o `../seed_dados_teste.sql`:
+
+```bash
+mysql -h $DB_HOST -u $DB_USER -p $DB_NAME < ../database_estrutura.sql
+mysql --default-character-set=utf8mb4 -h $DB_HOST -u $DB_USER -p $DB_NAME < ../seed_dados_teste.sql
+```
+
+> ⚠️ Use `--default-character-set=utf8mb4` ao importar para preservar acentuação.
+> Detalhes das credenciais demo em [`docs/SEED_DADOS_TESE.md`](../docs/SEED_DADOS_TESE.md).
 
 ### 5️⃣ Execute a aplicação
 
@@ -286,7 +324,7 @@ Todos os erros seguem um envelope padronizado com `error` e `trace_id`:
 
 <div align="center">
 
-A suíte possui **136 testes** distribuídos em 16 módulos (auth, catálogos, cliente,
+A suíte possui **162 testes** distribuídos em 16 módulos (auth, catálogos, cliente,
 admin, sync, taxi, revisão, fluxos completos e edge-cases) além de um smoke test.
 
 ```bash
@@ -299,12 +337,13 @@ PYTHONPATH=. .venv/bin/python tests/smoke_phase1.py
 
 | Item | Status |
 |:---|:---:|
-| Total de testes | ✅ 136 passando |
+| Total de testes | ✅ 162 passando |
 | Smoke test | ✅ `SMOKE_TEST_OK` |
 | Fluxo cliente completo | ✅ `test_flow_cliente.py` |
 | Fluxo admin completo | ✅ `test_flow_admin.py` |
 | Edge-cases (401/403/404/409/422/500) | ✅ `test_edge_cases.py` |
 | Auditoria de SQL Injection | ✅ Todas as queries parameterizadas |
+| Validação ponta-a-ponta (MySQL real) | ✅ Seed aplicado + login/fluxo validados (16/09/2026) |
 
 </div>
 
@@ -324,6 +363,8 @@ PYTHONPATH=. .venv/bin/python tests/smoke_phase1.py
 | Diagrama do banco de dados (DER) | ✅ Concluído — [docs/DER.md](../docs/DER.md) |
 | Deploy / CI-CD | ✅ Concluído — GitHub Actions + Docker (`ci.yml`, `Dockerfile`, `docker-compose.yml`) |
 | Rotas de `apólice` (CRUD completo) | ✅ Concluído — Admin: listar, detalhe, criar, atualizar, status |
+| Seed de dados de demonstração | ✅ Concluído — [seed_dados_teste.sql](../seed_dados_teste.sql) + [docs/SEED_DADOS_TESE.md](../docs/SEED_DADOS_TESE.md) |
+| Validação ponta-a-ponta contra MySQL real | ✅ Concluído — login + fluxo cliente/admin + sync (16/09/2026) |
 
 </div>
 

@@ -164,7 +164,7 @@ SELECT
     tsa.id_solicitacao_assistencia, tsa.fk_solicitacao, tsa.status, tsa.comentario,
     tsa.data_inclusao, tsa.data_atualizacao, tsa.version,
     tta.id_tipo_assistencia, tta.codigo AS tipo_codigo, tta.nome AS tipo_nome,
-    tu.id_usuario, tu.nome_exibicao
+    tu.id_user AS id_usuario, tu.nome_exibicao
 FROM tb_solicitacao_assistencia tsa
 JOIN tb_assistencia ta ON tsa.fk_assistencia = ta.id_assistencia
 JOIN tb_tipo_assistencia tta ON ta.fk_id_tipo_assistencia = tta.id_tipo_assistencia

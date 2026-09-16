@@ -25,7 +25,7 @@ def _fetch_all(query: str, params: tuple) -> list[dict]:
 
 _FIND_CLIENT_BY_CPF = """
 SELECT
-    u.id_user, u.fk_pessoa, u.login, u.perfil, u.fk_status,
+    u.id_user, u.fk_pessoa, u.login, u.senha, u.perfil, u.fk_status,
     u.nome_exibicao, u.email,
     s.codigo AS status_codigo,
     pf.nome, pf.cpf, pf.cpf_mascarado
@@ -38,7 +38,7 @@ LIMIT 1
 
 _FIND_ANALYST_BY_LOGIN = """
 SELECT
-    u.id_user, u.fk_pessoa, u.login, u.perfil, u.fk_status,
+    u.id_user, u.fk_pessoa, u.login, u.senha, u.perfil, u.fk_status,
     u.nome_exibicao, u.email, u.fk_seguradora,
     s.codigo AS status_codigo
 FROM tb_user u

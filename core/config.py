@@ -16,6 +16,7 @@ class Settings(BaseSettings):
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"
+        extra = "ignore"  # .env possui nomes legados (host/user/password/bank/port) usados por database/DataBase.py
 
 
 @lru_cache
