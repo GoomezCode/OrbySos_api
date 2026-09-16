@@ -9,7 +9,9 @@ from schemas.admin import (
     RecusarRequest,
     VersionRequest,
 )
+from schemas.apolice import ApoliceCreateRequest, ApoliceStatusRequest, ApoliceUpdateRequest
 import services.admin_service as admin_service
+import services.apolice_service as apolice_service
 
 router = APIRouter(prefix="/admin", tags=["admin"])
 
@@ -133,3 +135,62 @@ def atualizar_assistencia(
     session: dict = Depends(require_perfil("ANALISTA")),
 ) -> dict:
     return admin_service.atualizar_assistencia(session, assistance_id, body)
+
+
+@router.get("/apolices")
+def listar_apolices(
+    status: str | None = Query(default=None),
+    numero_apolice: str | None = Query(default=None),
+    pessoa: str | None = Query(default=None),
+    placa: str | None = Query(default=None),
+    seguradora: int | None = Query(default=None),
+    sort: str | None = Query(default=None),
+    page: int = Query(default=1, ge=1),
+    page_size: int = Query(default=20, ge=1, le=100),
+    session: dict = Depends(require_perfil("ANALISTA")),
+) -> dict:
+    return apolice_service.list_apolices(
+        session,
+        status_filter=status,
+        numero_apolice=numero_apolice,
+        pessoa=pessoa,
+        placa=placa,
+        seguradora=seguradora,
+        sort=sort,
+        page=page,
+        page_size=page_size,
+    )
+
+
+@router.get("/apolices/{apolice_id}")
+def detalhe_apolice(
+    apolice_id: int,
+    session: dict = Depends(require_perfil("ANALISTA")),
+) -> dict:
+    return apolice_service.get_detalhe(session, apolice_id)
+
+
+@router.post("/apolices", status_code=201)
+def criar_apolice(
+    body: ApoliceCreateRequest,
+    session: dict = Depends(require_perfil("ANALISTA")),
+) -> dict:
+    return apolice_service.criar_apolice(session, body)
+
+
+@router.patch("/apolices/{apolice_id}")
+def atualizar_apolice(
+    apolice_id: int,
+    body: ApoliceUpdateRequest,
+    session: dict = Depends(require_perfil("ANALISTA")),
+) -> dict:
+    return apolice_service.atualizar_apolice(session, apolice_id, body)
+
+
+@router.post("/apolices/{apolice_id}/status")
+def alterar_status_apolice(
+    apolice_id: int,
+    body: ApoliceStatusRequest,
+    session: dict = Depends(require_perfil("ANALISTA")),
+) -> dict:
+    return apolice_service.alterar_status_apolice(session, apolice_id, body)

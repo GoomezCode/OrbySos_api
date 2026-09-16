@@ -62,7 +62,7 @@ OrbySos_api/
 │   ├── security.py        #   Geração/decodificação de tokens JWT
 │   ├── deps.py            #   Dependências: sessão atual, require_perfil
 │   └── errors.py          #   Envelope padrão de erro {error, trace_id}
-├── routers/               # Camada HTTP — 26 endpoints (prefixo /api/v1)
+├── routers/               # Camada HTTP — 31 endpoints (prefixo /api/v1)
 │   ├── auth.py            #   login clientes/analistas, me, logout
 │   ├── catalogs.py        #   tipos-ocorrencia, configurações públicas
 │   ├── client.py          #   área do cliente (solicitações, apólices, perguntas)
@@ -181,7 +181,7 @@ curl -s http://localhost:8080/api/v1/clientes/me \
 
 ---
 
-## 📡 Endpoints (26 total — prefixo `/api/v1`)
+## 📡 Endpoints (31 total — prefixo `/api/v1`)
 
 ### 🔑 Auth
 
@@ -226,9 +226,15 @@ curl -s http://localhost:8080/api/v1/clientes/me \
 | `POST` | `/admin/solicitacoes/{id}/concluir` | ANALISTA |
 | `POST` | `/admin/solicitacoes/{id}/assistencias` | ANALISTA |
 | `PATCH` | `/admin/solicitacao-assistencias/{assistance_id}` | ANALISTA |
+| `GET` | `/admin/apolices` (filtros: status, numero_apolice, pessoa, placa, seguradora, sort, paginação) | ANALISTA |
+| `GET` | `/admin/apolices/{apolice_id}` | ANALISTA |
+| `POST` | `/admin/apolices` | ANALISTA |
+| `PATCH` | `/admin/apolices/{apolice_id}` (`version` obrigatório) | ANALISTA |
+| `POST` | `/admin/apolices/{apolice_id}/status` (`version` obrigatório) | ANALISTA |
 
 > A maioria das ações no admin exige `version` no body — **controle de concorrência
-> otimista** retorna `409 REQUEST_VERSION_CONFLICT` se a versão estiver obsoleta.
+> otimista** retorna `409 REQUEST_VERSION_CONFLICT` se a versão estiver obsoleta
+> (nas apólices, `POLICY_VERSION_CONFLICT`).
 
 ### 🔄 Sincronização em tempo real
 
@@ -311,13 +317,13 @@ PYTHONPATH=. .venv/bin/python tests/smoke_phase1.py
 | Item | Status |
 |:---|:---:|
 | Autenticação e autorização (JWT) | ✅ Concluído |
-| Testes automatizados | ✅ Concluído (136) |
+| Testes automatizados | ✅ Concluído (162) |
 | Padronização das mensagens de erro | ✅ Concluído (envelope único) |
 | Sincronização em tempo real (SSE) | ✅ Concluído |
 | Controle de concorrência otimista (`version`) | ✅ Concluído |
-| Diagrama do banco de dados (DER) | ⏳ Pendente |
-| Deploy / CI-CD | ⏳ Pendente |
-| Rotas de `apólice` (CRUD completo) | ⏳ Pendente |
+| Diagrama do banco de dados (DER) | ✅ Concluído — [docs/DER.md](../docs/DER.md) |
+| Deploy / CI-CD | ✅ Concluído — GitHub Actions + Docker (`ci.yml`, `Dockerfile`, `docker-compose.yml`) |
+| Rotas de `apólice` (CRUD completo) | ✅ Concluído — Admin: listar, detalhe, criar, atualizar, status |
 
 </div>
 
