@@ -7,43 +7,6 @@ router = APIRouter(
     tags=[""]
 )
 
-@router.get("/tipos-ocorrencia")
-def tipos_ocorrencia():
-    items = []
-    for i in select().select_all("tb_ocorrencia"):
-        items.append({
-             "id_tipo_ocorrencia": i[0],
-             "codigo": i[1],
-             "nome": i[2],
-             "descricao": i[3],
-             "ativo": i[4],
-             "ordem": i[0]
-        })
-    json = {
-        "schema_version": 2,
-        "request_query": { "ativo": True },
-        "response":{
-            "items":items
-        }
-    }
-    return json
-
-@router.get("/configuracoes/publicas")
-def configuracoes_publicas():
-    json = {
-    "schema_version": 2,
-    "response": {
-            "pais": "BR",
-            "mensagem": "Em caso de feridos ou risco imediato, procure os servicos publicos de emergencia.",
-            "servicos": [
-                { "codigo": "SAMU", "nome": "SAMU", "telefone": "192" },
-                { "codigo": "BOMBEIROS", "nome": "Corpo de Bombeiros", "telefone": "193" },
-                { "codigo": "POLICIA", "nome": "Policia Militar", "telefone": "190" }
-            ]
-        }
-    }
-    return json
-
 @router.get("/solicitacoes/{solicitacao_id}")
 def solicitacoes_id(solicitacao_id:int):
     solicitacao = select().solicitacoes_id(solicitacao_id)
