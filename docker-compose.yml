@@ -1,0 +1,41 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: orbyt_db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-orbyt_dev}
+      MYSQL_DATABASE: ${DB_NAME:-orbyt}
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - db_data:/var/lib/mysql
+      - ../database_estrutura.sql:/docker-entrypoint-initdb.d/01_schema.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-p${DB_PASSWORD:-orbyt_dev}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: orbyt_api
+    restart: unless-stopped
+    ports:
+      - "${API_PORT:-8080}:8080"
+    environment:
+      DB_HOST: db
+      DB_USER: ${DB_USER:-root}
+      DB_PASSWORD: ${DB_PASSWORD:-orbyt_dev}
+      DB_NAME: ${DB_NAME:-orbyt}
+      DB_PORT: 3306
+      JWT_SECRET: ${JWT_SECRET:-CHANGE_ME_IN_PRODUCTION}
+      JWT_ALGORITHM: HS256
+      JWT_EXPIRE_SECONDS: 3600
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  db_data:
